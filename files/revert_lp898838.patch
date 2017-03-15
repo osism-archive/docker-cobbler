@@ -1,0 +1,36 @@
+--- a/usr/lib/python2.7/dist-packages/cobbler/pxegen.py  2017-03-15 22:47:24.350773553 +0000
++++ b/usr/lib/python2.7/dist-packages/cobbler/pxegen.py  2017-03-15 22:47:47.638154392 +0000
+@@ -87,16 +87,12 @@
+                         dst, api=self.api, cache=False, logger=self.logger)
+                 utils.copyfile_pattern('/var/lib/cobbler/loaders/menu.c32',
+                         dst, api=self.api, cache=False, logger=self.logger)
+-                utils.copyfile_pattern('/var/lib/cobbler/loaders/chain.c32',
+-                        dst, api=self.api, cache=False, logger=self.logger)
+             except:
+                 try:
+                     utils.copyfile_pattern('/usr/share/syslinux/pxelinux.0',
+                             dst, api=self.api, cache=False, logger=self.logger)
+                     utils.copyfile_pattern('/usr/share/syslinux/menu.c32',
+                             dst, api=self.api, cache=False, logger=self.logger)
+-                    utils.copyfile_pattern('/usr/share/syslinux/chain.c32',
+-                            dst, api=self.api, cache=False, logger=self.logger)
+                 except:
+                     # This is from fuel-bootstrap-iso after the build of the image
+                     # has happened using the build-fuel-bootstrap-iso script
+@@ -105,16 +101,12 @@
+                     # This is from Debian's syslinux-common package
+                     utils.copyfile_pattern('/usr/lib/syslinux/modules/bios/menu.c32',
+                             dst, api=self.api, cache=False, logger=self.logger)
+-                    utils.copyfile_pattern('/usr/lib/syslinux/modules/bios/chain.c32',
+-                            dst, api=self.api, cache=False, logger=self.logger)
+
+         except:
+             utils.copyfile_pattern('/usr/lib/syslinux/pxelinux.0',
+                     dst, api=self.api, cache=False, logger=self.logger)
+             utils.copyfile_pattern('/usr/lib/syslinux/menu.c32',
+                     dst, api=self.api, cache=False, logger=self.logger)
+-            utils.copyfile_pattern('/usr/lib/syslinux/chain.c32',
+-                    dst, api=self.api, cache=False, logger=self.logger)
+
+         # copy memtest only if we find it
+         utils.copyfile_pattern('/boot/memtest*', image_dst,
