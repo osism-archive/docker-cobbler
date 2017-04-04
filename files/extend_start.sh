@@ -13,6 +13,11 @@ if [[ ! -e /var/lib/cobbler/.bootstrapped ]]; then
     touch /var/lib/cobbler/.bootstrapped
 fi
 
+if [[ ! -e /srv/www/cobbler/.bootstrapped ]]; then
+    cp -r /srv/www/cobbler.docker/* /srv/www/cobbler
+    touch /srv/www/cobbler/.bootstrapped
+fi
+
 rm -f /var/run/dhcpd.pid
 
 apache2ctl start
