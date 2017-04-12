@@ -2,7 +2,10 @@ FROM ubuntu:17.04
 MAINTAINER Betacloud Solutions GmbH (https://www.betacloud-solutions.de)
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION ${VERSION:-2.8.0}
+ENV VERSION ${VERSION:-2.8}
+
+# NOTE: the release28 branch contains bugfixes for the 2.8 series not yet released
+ENV BRANCH ${BRANCH:-release28}
 
 COPY files/extend_start.sh /extend_start.sh
 
@@ -25,7 +28,7 @@ RUN apt-get update \
         syslinux \
         xinetd
 
-RUN git clone -b v$VERSION https://github.com/cobbler/cobbler /cobbler-repository \
+RUN git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
     && cd /cobbler-repository \
     && make install \
     && cp -r /var/lib/cobbler /var/lib/cobbler.docker \
