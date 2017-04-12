@@ -26,7 +26,10 @@ RUN apt-get update \
         python-urlgrabber \
         python-yaml \
         syslinux \
-        xinetd
+        xinetd \
+    && a2enmod proxy \
+    && a2enmod proxy_http
+
 
 RUN git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
     && cd /cobbler-repository \
