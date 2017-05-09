@@ -14,6 +14,8 @@ RUN apt-get update \
     && apt-get install -y \
         apache2 \
         atftpd \
+        debmirror \
+        fence-agents \
         git \
         isc-dhcp-server \
         libapache2-mod-wsgi \
