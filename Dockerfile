@@ -32,18 +32,23 @@ RUN apt-get update \
     && a2enmod proxy \
     && a2enmod proxy_http
 
-
 RUN git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
     && cd /cobbler-repository \
     && make install \
-    && cp -r /var/lib/cobbler /var/lib/cobbler.docker \
+    && ln -s /etc/apache2/conf-available/cobbler.conf /etc/apache2/conf-enabled/cobbler.conf \
+    && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf
+
+ADD http://cobbler.github.io/loaders/elilo-3.8-ia64.efi /var/lib/cobbler/loaders/elilo-ia64.efi
+ADD http://cobbler.github.io/loaders/grub-0.97-x86.efi /var/lib/cobbler/loaders/grub-x86.efi
+ADD http://cobbler.github.io/loaders/grub-0.97-x86_64.efi /var/lib/cobbler/loaders/grub-x86_64.efi
+ADD http://cobbler.github.io/loaders/menu.c32-4.02 /var/lib/cobbler/loaders/menu.c32
+ADD http://cobbler.github.io/loaders/pxelinux.0-4.02 /var/lib/cobbler/loaders/pxelinux.0
+ADD http://cobbler.github.io/loaders/yaboot-1.3.17 /var/lib/cobbler/loaders/yaboot
+
+RUN cp -r /var/lib/cobbler /var/lib/cobbler.docker \
     && rm -rf /var/lib/cobbler/* \
     && cp -r /srv/www/cobbler /srv/www/cobbler.docker \
-    && rm -rf /srv/www/cobbler/* \
-    && ln -s /etc/apache2/conf-available/cobbler.conf /etc/apache2/conf-enabled/cobbler.conf \
-    && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf \
-    && ln -s /var/lib/cobbler/loaders/menu.c32 /usr/lib/syslinux/menu.c32 \
-    && ln -s /var/lib/cobbler/loaders/pxelinux.0 /usr/lib/syslinux/pxelinux.0
+    && rm -rf /srv/www/cobbler/*
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
