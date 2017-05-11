@@ -17,6 +17,7 @@ RUN apt-get update \
         debmirror \
         fence-agents \
         git \
+        ipmitool \
         isc-dhcp-server \
         libapache2-mod-wsgi \
         lsb-release \
