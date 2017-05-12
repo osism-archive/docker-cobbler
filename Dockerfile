@@ -48,6 +48,8 @@ ADD http://cobbler.github.io/loaders/yaboot-1.3.17 /var/lib/cobbler/loaders/yabo
 
 ADD https://cobbler.github.io/signatures/$VERSION.x/latest.json /var/lib/cobbler/distro_signatures.json
 
+ADD files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
+
 RUN cp -r /var/lib/cobbler /var/lib/cobbler.docker \
     && rm -rf /var/lib/cobbler/* \
     && cp -r /srv/www/cobbler /srv/www/cobbler.docker \
