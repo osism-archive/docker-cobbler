@@ -51,7 +51,8 @@ ADD https://cobbler.github.io/signatures/$VERSION.x/latest.json /var/lib/cobbler
 RUN cp -r /var/lib/cobbler /var/lib/cobbler.docker \
     && rm -rf /var/lib/cobbler/* \
     && cp -r /srv/www/cobbler /srv/www/cobbler.docker \
-    && rm -rf /srv/www/cobbler/*
+    && rm -rf /srv/www/cobbler/* \
+    && ln -s /srv/www/cobbler /var/www
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
