@@ -13,8 +13,12 @@ node {
       checkout scm
     }
 
-    stage('Publish') {
-      sh 'scripts/publish.sh'
+    stage('Build') {
+      sh 'scripts/build.sh'
+    }
+
+    stage('Push') {
+      sh 'scripts/push.sh'
     }
   }
 
