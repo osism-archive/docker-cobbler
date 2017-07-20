@@ -1,6 +1,6 @@
 # docker-cobbler
 
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-betacloud%2Fcobbler-blue.svg)](https://hub.docker.com/r/betacloud/cobbler/)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-osism%2Fcobbler-blue.svg)](https://hub.docker.com/r/osism/cobbler/)
 
 License
 -------
@@ -18,7 +18,7 @@ limitations under the License.
 Author information
 ------------------
 
-This Docker image was created by [Betacloud Solutions GmbH](https://betacloud-solutions.de).
+This Docker image was created by [Betacloud Solutions GmbH](https://www.betacloud-solutions.de).
 
 Notices
 -------
