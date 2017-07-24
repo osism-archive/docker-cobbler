@@ -8,12 +8,17 @@ set -x
 
 # Available environment variables
 #
+# DIRECTORY
 # REPOSITORY
 # VERSION
 
 # Set default values
 
 BUILD_OPTS=${BUILD_OPTS:-}
+
+if [[ ! -z $DIRECTORY ]]; then
+    pushd $DIRECTORY
+fi
 
 # https://github.com/jenkinsci/docker/blob/master/update-official-library.sh
 version-from-dockerfile() {
@@ -26,3 +31,7 @@ fi
 
 docker push "$REPOSITORY:$VERSION"
 docker rmi "$REPOSITORY:$VERSION"
+
+if [[ ! -z $DIRECTORY ]]; then
+    popd
+fi
