@@ -1,5 +1,5 @@
 FROM ubuntu:17.04
-MAINTAINER Betacloud Solutions GmbH (https://www.betacloud-solutions.de)
+LABEL maintainer="Betacloud Solutions GmbH (https://www.betacloud-solutions.de)"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV VERSION ${VERSION:-2.8}
@@ -7,7 +7,13 @@ ENV VERSION ${VERSION:-2.8}
 # NOTE: the release28 branch contains bugfixes for the 2.8 series not yet released
 ENV BRANCH ${BRANCH:-release28}
 
-COPY files/extend_start.sh /extend_start.sh
+ADD http://cobbler.github.io/loaders/elilo-3.8-ia64.efi /var/lib/cobbler/loaders/elilo-ia64.efi
+ADD http://cobbler.github.io/loaders/grub-0.97-x86.efi /var/lib/cobbler/loaders/grub-x86.efi
+ADD http://cobbler.github.io/loaders/grub-0.97-x86_64.efi /var/lib/cobbler/loaders/grub-x86_64.efi
+ADD http://cobbler.github.io/loaders/menu.c32-4.02 /var/lib/cobbler/loaders/menu.c32
+ADD http://cobbler.github.io/loaders/pxelinux.0-4.02 /var/lib/cobbler/loaders/pxelinux.0
+ADD http://cobbler.github.io/loaders/yaboot-1.3.17 /var/lib/cobbler/loaders/yaboot
+ADD https://cobbler.github.io/signatures/$VERSION.x/latest.json /var/lib/cobbler/distro_signatures.json
 
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -31,33 +37,24 @@ RUN apt-get update \
         syslinux \
         xinetd \
     && a2enmod proxy \
-    && a2enmod proxy_http
-
-RUN git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
+    && a2enmod proxy_http \
+    && git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
     && cd /cobbler-repository \
     && make install \
     && ln -s /etc/apache2/conf-available/cobbler.conf /etc/apache2/conf-enabled/cobbler.conf \
-    && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf
-
-ADD http://cobbler.github.io/loaders/elilo-3.8-ia64.efi /var/lib/cobbler/loaders/elilo-ia64.efi
-ADD http://cobbler.github.io/loaders/grub-0.97-x86.efi /var/lib/cobbler/loaders/grub-x86.efi
-ADD http://cobbler.github.io/loaders/grub-0.97-x86_64.efi /var/lib/cobbler/loaders/grub-x86_64.efi
-ADD http://cobbler.github.io/loaders/menu.c32-4.02 /var/lib/cobbler/loaders/menu.c32
-ADD http://cobbler.github.io/loaders/pxelinux.0-4.02 /var/lib/cobbler/loaders/pxelinux.0
-ADD http://cobbler.github.io/loaders/yaboot-1.3.17 /var/lib/cobbler/loaders/yaboot
-
-ADD https://cobbler.github.io/signatures/$VERSION.x/latest.json /var/lib/cobbler/distro_signatures.json
-
-ADD files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
-
-RUN cp -r /var/lib/cobbler /var/lib/cobbler.docker \
+    && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && rm -rf /cobbler-repository \
+    && cp -r /var/lib/cobbler /var/lib/cobbler.docker \
     && rm -rf /var/lib/cobbler/* \
     && cp -r /srv/www/cobbler /srv/www/cobbler.docker \
     && rm -rf /srv/www/cobbler/* \
     && ln -s /srv/www/cobbler /var/www
 
-RUN apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && rm -rf /cobbler-repository
+ADD files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
+COPY files/run.sh /run.sh
 
-CMD ["/extend_start.sh"]
+VOLUME ["/var/lib/cobbler", "/mnt", "/srv/www/cobbler"]
+
+CMD ["/run.sh"]
