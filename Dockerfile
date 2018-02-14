@@ -1,4 +1,4 @@
-FROM ubuntu:17.04
+FROM ubuntu:16.04
 LABEL maintainer="Betacloud Solutions GmbH (https://www.betacloud-solutions.de)"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -43,14 +43,17 @@ RUN apt-get update \
     && make install \
     && ln -s /etc/apache2/conf-available/cobbler.conf /etc/apache2/conf-enabled/cobbler.conf \
     && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && rm -rf /cobbler-repository \
     && cp -r /var/lib/cobbler /var/lib/cobbler.docker \
-    && rm -rf /var/lib/cobbler/* \
     && cp -r /srv/www/cobbler /srv/www/cobbler.docker \
-    && rm -rf /srv/www/cobbler/* \
-    && ln -s /srv/www/cobbler /var/www
+    && ln -s /srv/www/cobbler /var/www \
+    && apt-get clean \
+    && rm -rf \
+        /var/lib/apt/lists/* \
+        /tmp/* \
+        /var/tmp/* \
+        /cobbler-repository \
+        /var/lib/cobbler/* \
+        /srv/www/cobbler/*
 
 ADD files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
 COPY files/run.sh /run.sh
