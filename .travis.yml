@@ -1,5 +1,5 @@
 ---
-language: python
+language: generic
 
 before_install:
   - scripts/travis.sh
