@@ -11,6 +11,9 @@ env:
     - VERSION=2.8
       BRANCH=release28
 
+before_script:
+  - bash scripts/lint.sh
+
 script:
   - bash scripts/build.sh
 

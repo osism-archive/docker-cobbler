@@ -16,8 +16,7 @@ ADD http://cobbler.github.io/loaders/yaboot-1.3.17 /var/lib/cobbler/loaders/yabo
 ADD https://cobbler.github.io/signatures/$VERSION.x/latest.json /var/lib/cobbler/distro_signatures.json
 
 RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y \
+    && apt-get install --no-install-recommends -y \
         apache2 \
         atftpd \
         debmirror \
@@ -36,11 +35,14 @@ RUN apt-get update \
         python-yaml \
         syslinux \
         xinetd \
+    && rm -rf /var/lib/apt/lists/* \
     && a2enmod proxy \
     && a2enmod proxy_http \
-    && git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository \
-    && cd /cobbler-repository \
-    && make install \
+    && git clone -b $BRANCH https://github.com/cobbler/cobbler /cobbler-repository
+
+WORKDIR /cobbler-repository
+
+RUN make install \
     && ln -s /etc/apache2/conf-available/cobbler.conf /etc/apache2/conf-enabled/cobbler.conf \
     && ln -s /etc/apache2/conf-available/cobbler_web.conf /etc/apache2/conf-enabled/cobbler_web.conf \
     && cp -r /var/lib/cobbler /var/lib/cobbler.docker \
@@ -48,14 +50,15 @@ RUN apt-get update \
     && ln -s /srv/www/cobbler /var/www \
     && apt-get clean \
     && rm -rf \
-        /var/lib/apt/lists/* \
         /tmp/* \
         /var/tmp/* \
         /cobbler-repository \
         /var/lib/cobbler/* \
         /srv/www/cobbler/*
 
-ADD files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
+WORKDIR /root
+
+COPY files/cobbler.conf /etc/apache2/conf-available/cobbler.conf
 COPY files/run.sh /run.sh
 
 VOLUME ["/var/lib/cobbler", "/mnt", "/srv/www/cobbler"]
