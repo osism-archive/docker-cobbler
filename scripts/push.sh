@@ -20,15 +20,6 @@ if [[ ! -z $DIRECTORY ]]; then
     pushd $DIRECTORY
 fi
 
-# https://github.com/jenkinsci/docker/blob/master/update-official-library.sh
-version-from-dockerfile() {
-    grep VERSION: Dockerfile | sed -e 's/.*:-\(.*\)}/\1/'
-}
-
-if [[ -z $VERSION ]]; then
-    VERSION=$(version-from-dockerfile)
-fi
-
 docker push "$REPOSITORY:$VERSION"
 docker rmi "$REPOSITORY:$VERSION"
 

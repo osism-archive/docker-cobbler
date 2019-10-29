@@ -8,6 +8,8 @@ env:
   global:
     - REPOSITORY=osism/cobbler
   matrix:
+    - VERSION=latest
+      BRANCH=release28
     - VERSION=2.8
       BRANCH=release28
 
