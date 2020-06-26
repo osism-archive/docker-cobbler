@@ -1,3 +1,7 @@
+**This project is no longer maintained.**
+
+MAAS is used for the provisioning of bare-metal systems. Therefore this image is no longer needed within OSISM and is no longer maintained.
+
 # docker-cobbler
 
 [![Build Status](https://travis-ci.org/osism/docker-cobbler.svg?branch=master)](https://travis-ci.org/osism/docker-cobbler)
